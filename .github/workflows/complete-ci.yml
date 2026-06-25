@@ -7,7 +7,7 @@ on:
 
 jobs:
     build:
-      runs-on: [self-hosted , wsl-1]
+      runs-on: [self-hosted ,Linux]
 
       steps:
         - name: checkout code
@@ -21,7 +21,7 @@ jobs:
 
     test:
       needs: build
-      runs-on: [self-hosted ,wsl-1]
+      runs-on: [self-hosted ,Linux]
       if: ${{ needs.build.result == 'success' }}
       
 
@@ -38,7 +38,7 @@ jobs:
 
     login:
       needs: test
-      runs-on: [self-hosted ,wsl-1]
+      runs-on: [self-hosted ,Linux]
       if: ${{ needs.test.result == 'success' }}
       env:
         image_tag: ${{ github.sha }}
