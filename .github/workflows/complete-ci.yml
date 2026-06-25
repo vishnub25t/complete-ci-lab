@@ -40,14 +40,24 @@ jobs:
       needs: test
       runs-on: [self-hosted ,wsl-1]
       if: ${{ needs.test.result == 'success' }}
+      env:
+        image_tag: ${{ github.sha }}
       steps:
-      -
-        name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        - name: Login to Docker Hub
+          uses: docker/login-action@v4
+          with:
+            username: ${{ vars.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+         
+        - name: docker image build
+          run: docker build -f Dockerfile -t dockerfile-image .
 
+        - name: docker image tag
+          run: docker tag dockerfile-image ${{ vars.DOCKERHUB_USERNAME }}/testing-lab:$image_tag        
+        
 
+        - name: docker image push
+          run: docker push ${{ vars.DOCKERHUB_USERNAME }}/testing-lab:$image_tag        
+        
       
 
