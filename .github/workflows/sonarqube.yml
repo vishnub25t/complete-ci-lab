@@ -7,7 +7,7 @@ on:
 
 jobs:
   sonarqube:
-    runs-on: [self-hosted ,wsl-1]
+    runs-on: [self-hosted ,Linux]
 
     steps:
       - name: Checkout code
