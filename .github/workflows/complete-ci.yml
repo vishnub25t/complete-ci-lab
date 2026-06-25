@@ -1,0 +1,53 @@
+name: complete-ci
+
+on:
+  workflow_dispatch:
+  #push:
+    #branches: ["main"]
+
+jobs:
+    build:
+      runs-on: [self-hosted , wsl-1]
+
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v6
+
+        - name: node modules install and Build
+          run: |
+            npm i
+            npm run build
+
+
+    test:
+      needs: build
+      runs-on: [self-hosted ,wsl-1]
+      if: ${{ needs.build.result == 'success' }}
+      
+
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v6
+
+        - name: Test case run
+          run: |
+            npm i
+            npm test
+
+
+
+    login:
+      needs: test
+      runs-on: [self-hosted ,wsl-1]
+      if: ${{ needs.test.result == 'success' }}
+      steps:
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+      
+
