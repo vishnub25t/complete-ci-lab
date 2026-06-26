@@ -67,6 +67,9 @@ This workflow performs the complete CI process:
 
 Dockerfile
 README.md
+app.js
+app.test.js
+package.json
 ```
 
 ---
